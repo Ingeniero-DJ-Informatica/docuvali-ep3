@@ -1,0 +1,101 @@
+{
+  "modelo": "LogisticRegression",
+  "hiperparametros": {
+    "C": 1.0,
+    "class_weight": "balanced",
+    "umbral_decision": 0.5
+  },
+  "regresion_logistica": {
+    "accuracy": 0.8294,
+    "precision": 0.6628,
+    "recall": 0.7783,
+    "f1": 0.7159,
+    "roc_auc": 0.8952,
+    "matriz_confusion": {
+      "tn": 983,
+      "fp": 175,
+      "fn": 98,
+      "tp": 344
+    },
+    "pct_automatico": 0.6756,
+    "errores_no_detectados_pct": 0.0612
+  },
+  "random_forest_baseline": {
+    "accuracy": 0.8319,
+    "precision": 0.6769,
+    "recall": 0.7489,
+    "f1": 0.7111,
+    "roc_auc": 0.8887,
+    "matriz_confusion": {
+      "tn": 1000,
+      "fp": 158,
+      "fn": 111,
+      "tp": 331
+    },
+    "pct_automatico": 0.6944,
+    "errores_no_detectados_pct": 0.0694
+  },
+  "analisis_umbrales": {
+    "0.35": {
+      "accuracy": 0.79,
+      "precision": 0.582,
+      "recall": 0.8507,
+      "f1": 0.6912,
+      "roc_auc": 0.8952,
+      "matriz_confusion": {
+        "tn": 888,
+        "fp": 270,
+        "fn": 66,
+        "tp": 376
+      },
+      "pct_automatico": 0.5962,
+      "errores_no_detectados_pct": 0.0413
+    },
+    "0.5": {
+      "accuracy": 0.8294,
+      "precision": 0.6628,
+      "recall": 0.7783,
+      "f1": 0.7159,
+      "roc_auc": 0.8952,
+      "matriz_confusion": {
+        "tn": 983,
+        "fp": 175,
+        "fn": 98,
+        "tp": 344
+      },
+      "pct_automatico": 0.6756,
+      "errores_no_detectados_pct": 0.0612
+    },
+    "0.6": {
+      "accuracy": 0.8337,
+      "precision": 0.6921,
+      "recall": 0.7172,
+      "f1": 0.7044,
+      "roc_auc": 0.8952,
+      "matriz_confusion": {
+        "tn": 1017,
+        "fp": 141,
+        "fn": 125,
+        "tp": 317
+      },
+      "pct_automatico": 0.7137,
+      "errores_no_detectados_pct": 0.0781
+    }
+  },
+  "coeficientes": {
+    "calidad_imagen": -0.8342830003585529,
+    "confianza_ocr_media": 0.1142152623799449,
+    "confianza_ocr_min": -0.9781823829641734,
+    "campos_detectados": -0.3073597509445955,
+    "rut_valido": -0.4585266010394722,
+    "iva_cuadra": -0.40039201226498844,
+    "total_cuadra": -0.21770781364807046,
+    "coincide_xml": -0.5873409320405732,
+    "log_monto": 0.25109918734206477,
+    "tipo_documento=boleta": -0.12692628904096956,
+    "tipo_documento=factura": -0.22320349358703406,
+    "tipo_documento=nota_credito": -0.044114279402340736
+  },
+  "n_entrenamiento": 6400,
+  "n_prueba": 1600
+}

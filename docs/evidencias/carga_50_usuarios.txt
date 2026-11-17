@@ -1,0 +1,25 @@
+[2026-11-17 13:40:03,612] vm/INFO/locust.main: Starting Locust 2.47.0
+[2026-11-17 13:40:03,612] vm/INFO/locust.main: Run time limit set to 60 seconds
+[2026-11-17 13:40:03,613] vm/INFO/locust.runners: Ramping to 50 users at a rate of 10.00 per second
+[2026-11-17 13:40:07,618] vm/INFO/locust.runners: All users spawned: {"ClienteContable": 50} (50 total users)
+[2026-11-17 13:41:03,613] vm/INFO/locust.main: --run-time limit reached, shutting down
+[2026-11-17 13:41:03,627] vm/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      GET /metricas                                                                    256     0(0.00%) |     21       3     708     12 |    4.27        0.00
+POST     POST /documentos (imagen)                                                        274     0(0.00%) |     16       2     563      5 |    4.57        0.00
+POST     POST /documentos/estructurado                                                    766     0(0.00%) |     19       2     858      5 |   12.76        0.00
+POST     POST /predicciones                                                              1602     0(0.00%) |     10       1     714      4 |   26.69        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                      2898     0(0.00%) |     14       1     858      4 |   48.29        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      GET /metricas                                                                          12     14     17     18     25     29     66    350    710    710    710    256
+POST     POST /documentos (imagen)                                                               5      6      7      7      9     29    180    480    560    560    560    274
+POST     POST /documentos/estructurado                                                           5      6      7      8     12     39    250    550    860    860    860    766
+POST     POST /predicciones                                                                      4      4      5      5      8     15     44    170    700    710    710   1602
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                              4      5      7      7     13     25    110    340    710    860    860   2898
+

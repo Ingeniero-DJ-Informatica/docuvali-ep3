@@ -1,0 +1,57 @@
+{
+  "version": "20261117-132743",
+  "umbral": 0.5,
+  "numericas": [
+    "calidad_imagen",
+    "confianza_ocr_media",
+    "confianza_ocr_min",
+    "campos_detectados",
+    "rut_valido",
+    "iva_cuadra",
+    "total_cuadra",
+    "coincide_xml",
+    "log_monto"
+  ],
+  "tipos": [
+    "boleta",
+    "factura",
+    "nota_credito"
+  ],
+  "media": [
+    0.68654359375,
+    0.836704375,
+    0.68345390625,
+    0.8655324999999999,
+    0.88609375,
+    0.928125,
+    0.93640625,
+    0.9146875,
+    11.48069145567265
+  ],
+  "escala": [
+    0.22730684926896716,
+    0.10545655998257944,
+    0.17475961990793587,
+    0.11082051031397572,
+    0.3176973657601484,
+    0.2582808246366733,
+    0.24402783644686418,
+    0.2793461604242128,
+    1.2931612332732527
+  ],
+  "coeficientes": {
+    "calidad_imagen": -0.8342830003585529,
+    "confianza_ocr_media": 0.1142152623799449,
+    "confianza_ocr_min": -0.9781823829641734,
+    "campos_detectados": -0.3073597509445955,
+    "rut_valido": -0.4585266010394722,
+    "iva_cuadra": -0.40039201226498844,
+    "total_cuadra": -0.21770781364807046,
+    "coincide_xml": -0.5873409320405732,
+    "log_monto": 0.25109918734206477,
+    "tipo_documento=boleta": -0.12692628904096956,
+    "tipo_documento=factura": -0.22320349358703406,
+    "tipo_documento=nota_credito": -0.044114279402340736
+  },
+  "intercepto": -0.4112759099374024
+}

@@ -1,0 +1,161 @@
+INFO:     Started server process [1828]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-11-17 13:38:25,153 INFO pika.adapters.utils.connection_workflow Pika version 1.5.0 connecting to ('127.0.0.1', 5672)
+2026-11-17 13:38:25,154 INFO pika.adapters.utils.io_services_utils Socket connected: <socket.socket fd=14, family=2, type=1, proto=6, laddr=('127.0.0.1', 36976), raddr=('127.0.0.1', 5672)>
+2026-11-17 13:38:25,154 INFO pika.adapters.utils.connection_workflow Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fee4ce25a90>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fee4ce25a90> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>).
+2026-11-17 13:38:25,157 INFO pika.adapters.utils.connection_workflow AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fee4ce25a90> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2026-11-17 13:38:25,157 INFO pika.adapters.utils.connection_workflow AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fee4ce25a90> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2026-11-17 13:38:25,158 INFO pika.adapters.blocking_connection Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fee4ce25a90> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2026-11-17 13:38:25,158 INFO pika.adapters.blocking_connection Created channel=1
+2026-11-17 13:38:25,161 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 32.0}
+INFO:     127.0.0.1:50636 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,165 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.8}
+INFO:     127.0.0.1:50648 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,169 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.5}
+INFO:     127.0.0.1:50662 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,173 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.8}
+INFO:     127.0.0.1:50670 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,176 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.8}
+INFO:     127.0.0.1:50684 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,180 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.0}
+INFO:     127.0.0.1:50696 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,183 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.0}
+INFO:     127.0.0.1:50712 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,189 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 4.9}
+INFO:     127.0.0.1:50716 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,197 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.4}
+INFO:     127.0.0.1:50732 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,200 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.2}
+INFO:     127.0.0.1:50734 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,203 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50742 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,206 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.6}
+INFO:     127.0.0.1:50754 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,210 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.6}
+INFO:     127.0.0.1:50766 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,213 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.2}
+INFO:     127.0.0.1:50768 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,216 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50772 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,219 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.2}
+INFO:     127.0.0.1:50786 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,223 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.9}
+INFO:     127.0.0.1:50796 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,233 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.3}
+INFO:     127.0.0.1:50806 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,237 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.9}
+INFO:     127.0.0.1:50814 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,240 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.5}
+INFO:     127.0.0.1:50828 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,244 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.5}
+INFO:     127.0.0.1:50842 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,247 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.5}
+INFO:     127.0.0.1:50854 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,250 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.2}
+INFO:     127.0.0.1:50856 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,254 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.9}
+INFO:     127.0.0.1:50858 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,258 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.1}
+INFO:     127.0.0.1:50866 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,265 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 3.3}
+INFO:     127.0.0.1:50874 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,269 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.1}
+INFO:     127.0.0.1:50890 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,274 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.9}
+INFO:     127.0.0.1:50906 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,278 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.8}
+INFO:     127.0.0.1:50916 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,282 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50932 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,287 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 2.3}
+INFO:     127.0.0.1:50944 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,292 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50958 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,295 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50966 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,300 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50976 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,304 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.7}
+INFO:     127.0.0.1:50986 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,307 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.4}
+INFO:     127.0.0.1:51000 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,311 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.4}
+INFO:     127.0.0.1:51014 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,315 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.4}
+INFO:     127.0.0.1:51028 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,318 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.4}
+INFO:     127.0.0.1:51032 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,321 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.1}
+INFO:     127.0.0.1:51048 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,324 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.5}
+INFO:     127.0.0.1:51064 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,327 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.1}
+INFO:     127.0.0.1:51076 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,330 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.1}
+INFO:     127.0.0.1:51090 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,333 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.3}
+INFO:     127.0.0.1:51106 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,336 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos/estructurado", "estado": 202, "ms": 1.4}
+INFO:     127.0.0.1:51120 - "POST /api/v1/documentos/estructurado HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,340 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos", "estado": 202, "ms": 2.5}
+INFO:     127.0.0.1:51128 - "POST /api/v1/documentos HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,345 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos", "estado": 202, "ms": 2.1}
+INFO:     127.0.0.1:51142 - "POST /api/v1/documentos HTTP/1.1" 202 Accepted
+2026-11-17 13:38:25,352 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos", "estado": 202, "ms": 5.1}
+INFO:     127.0.0.1:51156 - "POST /api/v1/documentos HTTP/1.1" 202 Accepted
+2026-11-17 13:38:27,359 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 3.9}
+INFO:     127.0.0.1:51164 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:38:38,564 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 11.7}
+INFO:     127.0.0.1:35400 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:38:38,579 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 7.2}
+INFO:     127.0.0.1:35408 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:38:41,445 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 6.9}
+INFO:     127.0.0.1:35418 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:38:41,458 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 5.4}
+INFO:     127.0.0.1:35428 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:38:41,614 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 2.5}
+INFO:     127.0.0.1:35434 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:38:41,625 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 5.0}
+INFO:     127.0.0.1:35436 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:38:43,000 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 5.3}
+INFO:     127.0.0.1:41178 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:38:43,012 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos", "estado": 202, "ms": 3.1}
+INFO:     127.0.0.1:41180 - "POST /api/v1/documentos HTTP/1.1" 202 Accepted
+2026-11-17 13:38:43,024 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos/da526a4cb2d5", "estado": 200, "ms": 4.2}
+INFO:     127.0.0.1:41186 - "GET /api/v1/documentos/da526a4cb2d5 HTTP/1.1" 200 OK
+2026-11-17 13:38:43,545 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos/da526a4cb2d5", "estado": 200, "ms": 1.2}
+INFO:     127.0.0.1:41198 - "GET /api/v1/documentos/da526a4cb2d5 HTTP/1.1" 200 OK
+2026-11-17 13:38:43,629 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 9.1}
+INFO:     127.0.0.1:41208 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:39:19,773 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 5.2}
+INFO:     127.0.0.1:34788 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:39:19,784 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 4.3}
+INFO:     127.0.0.1:34798 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:39:23,717 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 36.2}
+INFO:     127.0.0.1:37952 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:39:23,762 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 32.4}
+INFO:     127.0.0.1:37954 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:39:23,901 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 3.4}
+INFO:     127.0.0.1:37968 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:39:23,918 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 9.0}
+INFO:     127.0.0.1:37972 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:39:25,234 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 4.1}
+INFO:     127.0.0.1:37984 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:39:25,247 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/documentos", "estado": 202, "ms": 3.8}
+INFO:     127.0.0.1:37986 - "POST /api/v1/documentos HTTP/1.1" 202 Accepted
+2026-11-17 13:39:25,260 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos/78922026f60f", "estado": 200, "ms": 3.9}
+INFO:     127.0.0.1:38000 - "GET /api/v1/documentos/78922026f60f HTTP/1.1" 200 OK
+2026-11-17 13:39:25,772 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos/78922026f60f", "estado": 200, "ms": 3.9}
+INFO:     127.0.0.1:38014 - "GET /api/v1/documentos/78922026f60f HTTP/1.1" 200 OK
+2026-11-17 13:39:25,811 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 6.0}
+INFO:     127.0.0.1:38022 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:39:36,586 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/metricas", "estado": 200, "ms": 18.4}
+INFO:     127.0.0.1:52074 - "GET /api/v1/metricas HTTP/1.1" 200 OK
+2026-11-17 13:39:36,599 INFO docuvali.api {"metodo": "POST", "ruta": "/api/v1/predicciones", "estado": 200, "ms": 2.7}
+INFO:     127.0.0.1:52080 - "POST /api/v1/predicciones HTTP/1.1" 200 OK
+2026-11-17 13:39:36,624 INFO docuvali.api {"metodo": "GET", "ruta": "/api/v1/documentos", "estado": 200, "ms": 5.6}
+INFO:     127.0.0.1:52096 - "GET /api/v1/documentos?limite=100 HTTP/1.1" 200 OK
+2026-11-17 13:39:38,895 INFO docuvali.api {"metodo": "GET", "ruta": "/docs", "estado": 200, "ms": 0.2}
+INFO:     127.0.0.1:52108 - "GET /docs HTTP/1.1" 200 OK

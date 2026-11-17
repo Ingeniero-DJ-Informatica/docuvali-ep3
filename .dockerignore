@@ -1,0 +1,9 @@
+.git
+**/__pycache__
+.pytest_cache
+data/*.csv
+docs/
+loadtest/
+tests/
+*.pem
+.env

@@ -1,0 +1,18 @@
+# Opcional en AWS: envía los logs de los contenedores a CloudWatch Logs.
+# Uso: docker compose -f docker-compose.yml -f docker-compose.aws.yml up -d
+x-cloudwatch: &cloudwatch
+  logging:
+    driver: awslogs
+    options:
+      awslogs-region: us-east-1
+      awslogs-group: /docuvali/ep3
+      awslogs-create-group: "true"
+services:
+  api:
+    <<: *cloudwatch
+  worker:
+    <<: *cloudwatch
+  dashboard:
+    <<: *cloudwatch
+  nginx:
+    <<: *cloudwatch

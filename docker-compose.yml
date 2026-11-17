@@ -1,0 +1,70 @@
+# DocuVali EP3 - despliegue en una instancia EC2 (o en local)
+# Uso: cp .env.example .env  &&  bash deploy/generar_certificado.sh  &&  docker compose up -d --build
+services:
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-docuvali}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-docuvali}
+    ports:
+      - "127.0.0.1:15672:15672"   # panel de RabbitMQ solo accesible por túnel SSH
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-docuvali}:${RABBITMQ_PASS:-docuvali}@rabbitmq:5672/%2F
+    volumes:
+      - datos:/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build: .
+    command: ["python", "-m", "app.worker.worker"]
+    env_file: .env
+    environment:
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-docuvali}:${RABBITMQ_PASS:-docuvali}@rabbitmq:5672/%2F
+    volumes:
+      - datos:/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 2                 # escalado horizontal: más workers = más documentos por minuto
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile
+    environment:
+      API_URL: http://api:8000
+      DASHBOARD_API_KEY: ${DASHBOARD_API_KEY}
+    depends_on: [api]
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./deploy/certs:/etc/nginx/certs:ro
+    depends_on: [api, dashboard]
+    restart: unless-stopped
+
+volumes:
+  datos:
+  rabbitmq_data:

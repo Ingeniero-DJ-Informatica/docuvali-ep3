@@ -1,0 +1,5 @@
+.env
+deploy/certs/
+__pycache__/
+.pytest_cache/
+*.pem

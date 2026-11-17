@@ -1,0 +1,5 @@
+Prueba TLS local (Nginx -> API)
+GET https://localhost/health -> 200
+GET http://localhost/ -> 301 (redirige a HTTPS)
+GET https://localhost/api/v1/metricas sin X-API-Key -> 401
+Protocolo negociado: TLSv1.3, cifrado TLS_AES_256_GCM_SHA384

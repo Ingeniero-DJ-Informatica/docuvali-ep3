@@ -58,7 +58,7 @@ docker compose up -d --build
 ## Desplegar en AWS Academy
 
 1. **Modelo en SageMaker** (desde una Notebook Instance de SageMaker):
-   `pip install -r requirements-dev.txt && python deploy/sagemaker_desplegar.py`
+   `pip install -U sagemaker && python deploy/sagemaker_desplegar.py`
    Entrena el modelo con un Training Job, crea el endpoint `docuvali-endpoint` y configura autoescalado (1 a 2 instancias).
 2. **Servidor EC2** (Amazon Linux 2023, `t3.medium`, rol `LabInstanceProfile`, puertos 22/80/443):
    `git clone <este repo> && cd docuvali-ep3 && bash deploy/ec2_instalar.sh`

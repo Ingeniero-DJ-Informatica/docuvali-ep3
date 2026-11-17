@@ -13,7 +13,10 @@ sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
 [ -f .env ] || { cp .env.example .env; echo ">> Edita el archivo .env con tus claves y vuelve a ejecutar"; exit 1; }
 bash deploy/generar_certificado.sh
-sudo docker compose -f docker-compose.yml -f docker-compose.aws.yml up -d --build
+# Con logs en CloudWatch; si el rol no tiene permiso de CloudWatch Logs, se levanta sin ellos
+sudo docker compose -f docker-compose.yml -f docker-compose.aws.yml up -d --build || {
+  echo ">> CloudWatch Logs no disponible: se levanta con logs locales (docker compose logs)";
+  sudo docker compose up -d --build; }
 sudo docker compose ps
 IP=$(curl -s http://checkip.amazonaws.com)
 echo ">> Dashboard: https://${IP}/dashboard/   API (Swagger): https://${IP}/docs"

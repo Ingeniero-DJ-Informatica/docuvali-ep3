@@ -44,13 +44,13 @@ Dashboard Streamlit (KPIs, explicación de cada decisión, calidad del modelo)
 | POST | `/api/v1/predicciones` | Predicción en tiempo real del modelo |
 | GET | `/api/v1/metricas` | Indicadores para el dashboard |
 
-Todas las rutas `/api/v1` requieren el encabezado `X-API-Key` y tienen límite de solicitudes por minuto (`429`).
+Todas las rutas `/api/v1` requieren el encabezado `X-API-Key` y tienen límite de solicitudes por minuto (`429`). El dashboard (pantalla interna de los revisores) pide usuario y contraseña en Nginx (`DASHBOARD_USUARIO` / `DASHBOARD_CLAVE`); para cambiarla: `bash deploy/crear_clave_dashboard.sh`.
 
 ## Ejecutar en local (sin AWS)
 
 ```bash
-cp .env.example .env            # en .env: EXTRACTOR=local (OCR con Tesseract) y PREDICTOR=local
-bash deploy/generar_certificado.sh 127.0.0.1
+cp .env.example .env            # en .env: EXTRACTOR=local, PREDICTOR=local y tu DASHBOARD_CLAVE
+bash deploy/generar_certificado.sh 127.0.0.1   # también crea el usuario del dashboard
 docker compose up -d --build
 # Dashboard: https://localhost/dashboard/   Swagger: https://localhost/docs
 ```

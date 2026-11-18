@@ -60,9 +60,16 @@ html, body, [class*="css"], .stMarkdown, .stText, button, input {{ font-family: 
 .check {{ display: flex; justify-content: space-between; padding: 9px 12px; border-radius: 10px; margin-bottom: 6px;
          background: #F5F9FA; font-size: .92rem; }}
 .check b.si {{ color: {VERDE}; }} .check b.no {{ color: {ROJO}; }}
-.paso {{ display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: .92rem; color: {NAVY}; }}
-.paso .n {{ width: 26px; height: 26px; border-radius: 50%; background: {TEAL}; color: white; display: grid;
-           place-items: center; font-size: .8rem; font-weight: 600; }}
+.paso {{ display: flex; align-items: center; gap: 10px; padding: 7px 10px; margin-bottom: 4px; border-radius: 10px;
+         font-size: .9rem; color: {GRIS}; transition: all .3s ease; }}
+.paso .n {{ width: 26px; height: 26px; min-width: 26px; border-radius: 50%; background: #D5E2E5; color: white;
+           display: grid; place-items: center; font-size: .8rem; font-weight: 700; }}
+.paso .ms {{ margin-left: auto; font-size: .75rem; color: {GRIS}; }}
+.paso.listo {{ color: {NAVY}; background: #E8F5EE; }} .paso.listo .n {{ background: {VERDE}; }}
+.paso.activo {{ color: {NAVY}; background: #FFF4E0; font-weight: 600; }}
+.paso.activo .n {{ background: {AMBAR}; animation: pulso 1s infinite; }}
+.paso.error {{ color: {ROJO}; background: #FBE9E7; }} .paso.error .n {{ background: {ROJO}; }}
+@keyframes pulso {{ 0% {{ box-shadow: 0 0 0 0 rgba(242,165,65,.7); }} 100% {{ box-shadow: 0 0 0 10px rgba(242,165,65,0); }} }}
 .stTabs [data-baseweb="tab-list"] {{ gap: 6px; }}
 .stTabs [data-baseweb="tab"] {{ background: #F1F6F7; border-radius: 10px 10px 0 0; padding: 10px 18px; font-weight: 600; }}
 .stTabs [aria-selected="true"] {{ background: {TEAL} !important; color: white !important; }}
@@ -173,27 +180,74 @@ def mostrar_resultado(p, variables=None, campos=None, tiempos=None):
                 tooltip=["Etapa", alt.Tooltip("ms:Q", format=".1f")]).properties(height=120).configure_view(strokeWidth=0), use_container_width=True)
 
 
+PASOS = ["API REST recibe (HTTPS)", "Cola RabbitMQ", "Worker: Amazon Textract",
+         "Reglas SII (RUT, IVA, XML)", "Modelo en SageMaker", "Resultado y explicación"]
+ICONO = {"listo": "✔", "error": "✘"}
+
+
+def dibujar_flujo(estados, detalle=None, tiempos=None):
+    """Pinta los 6 pasos con su estado: pendiente, activo, listo o error."""
+    tiempos = tiempos or {}
+    html = ""
+    for i, (paso, est) in enumerate(zip(PASOS, estados), 1):
+        ms = f'<span class="ms">{tiempos[i]:.0f} ms</span>' if i in tiempos else ""
+        html += f'<div class="paso {est}"><span class="n">{ICONO.get(est, i)}</span>{paso}{ms}</div>'
+    if detalle:
+        html += f'<div style="font-size:.78rem;color:{GRIS};margin-top:6px">{detalle}</div>'
+    flujo_ph.markdown(html, unsafe_allow_html=True)
+
+
+def avanzar(n_listos, activo=None, error=False, detalle=None, tiempos=None):
+    estados = ["listo"] * n_listos + ["pendiente"] * (len(PASOS) - n_listos)
+    if activo is not None:
+        estados[activo] = "error" if error else "activo"
+    st.session_state["flujo"] = (estados, detalle, tiempos)
+    dibujar_flujo(estados, detalle, tiempos)
+
+
 def procesar(nombre, contenido, tipo_mime, tipo, xml=None):
     files = {"archivo": (nombre, contenido, tipo_mime)}
     if xml:
         files["xml_dte"] = (f"{Path(nombre).stem}.xml", xml, "application/xml")
     with st.status("Procesando documento…", expanded=True) as estado:
+        avanzar(0, activo=0, detalle=f"Enviando {nombre}…")
         t0 = time.perf_counter()
         r = api("POST", "/api/v1/documentos", files=files, data={"tipo_documento": tipo})
-        st.write(f"📨 La API respondió **202** en {(time.perf_counter() - t0) * 1000:.0f} ms · ID `{r['id']}`")
+        ms_api = (time.perf_counter() - t0) * 1000
+        st.write(f"📨 La API respondió **202** en {ms_api:.0f} ms · ID `{r['id']}`")
+        tiempos = {1: ms_api}
+        avanzar(1, activo=1, detalle=f"Documento {r['id']} en la cola", tiempos=tiempos)
+        time.sleep(0.4)
         st.write("🐇 Documento en la cola de RabbitMQ, esperando un worker…")
         doc = None
-        for _ in range(60):
+        for _ in range(75):
             doc = api("GET", f"/api/v1/documentos/{r['id']}")
+            if doc["estado"] == "procesando":
+                avanzar(2, activo=2, detalle="Un worker tomó el documento", tiempos=tiempos)
             if doc["estado"] in ("listo", "error"):
                 break
             time.sleep(0.4)
         if doc and doc["estado"] == "listo":
+            res = doc["resultado"]
+            tiempos[3] = doc["ms_extraccion"] or 0
+            avanzar(2, activo=2, detalle="Amazon Textract leyendo la factura", tiempos=tiempos)
+            time.sleep(0.5)
             st.write("🔍 OCR (Amazon Textract) leyó los campos de la factura")
+            avanzar(3, activo=3, detalle="Validando RUT, IVA, total y XML", tiempos=tiempos)
+            time.sleep(0.5)
             st.write("📐 Reglas del SII aplicadas: RUT, IVA, total y XML")
-            st.write(f"🧠 Modelo ({doc['resultado']['motor_modelo']}) entregó su decisión")
+            avanzar(4, activo=4, detalle=f"Consultando el modelo ({res['motor_modelo']})", tiempos=tiempos)
+            time.sleep(0.5)
+            tiempos[5] = doc["ms_modelo"] or 0
+            st.write(f"🧠 Modelo ({res['motor_modelo']}) entregó su decisión")
+            decision = NOMBRES[res["prediccion"]["decision"]]
+            tiempos[6] = doc["ms_total"]
+            avanzar(6, detalle=f"<b>{decision}</b> · documento {r['id']} · total {doc['ms_total']:.0f} ms", tiempos=tiempos)
             estado.update(label=f"Listo en {doc['ms_total']:.0f} ms", state="complete", expanded=False)
         else:
+            paso_fallo = 1 if not doc or doc["estado"] in ("en_cola",) else 2
+            avanzar(paso_fallo, activo=paso_fallo, error=True,
+                    detalle=f"Falló: {(doc or {}).get('error') or 'tiempo de espera agotado'}", tiempos=tiempos)
             estado.update(label="El documento no pudo procesarse", state="error")
     st.cache_data.clear()
     return doc
@@ -209,10 +263,12 @@ with st.sidebar:
         st.error("API sin respuesta")
     auto = st.toggle("Actualizar indicadores cada 5 s", value=True)
     st.divider()
-    st.markdown("### 🔄 Flujo de un documento")
-    for i, paso in enumerate(["API REST recibe (HTTPS)", "Cola RabbitMQ", "Worker: Amazon Textract",
-                              "Reglas SII (RUT, IVA, XML)", "Modelo en SageMaker", "Resultado y explicación"], 1):
-        st.markdown(f'<div class="paso"><span class="n">{i}</span>{paso}</div>', unsafe_allow_html=True)
+    st.markdown("### 🔄 Flujo del último documento")
+    flujo_ph = st.empty()
+    if "flujo" in st.session_state:
+        dibujar_flujo(*st.session_state["flujo"])
+    else:
+        dibujar_flujo(["pendiente"] * len(PASOS), "Procesa un documento para ver el recorrido en vivo")
     st.divider()
     st.caption("DocuVali · EP3 ITY1102 · Duoc UC")
 

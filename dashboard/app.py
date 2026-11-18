@@ -141,17 +141,22 @@ def razones_html(razones):
     return html
 
 
-def chequeos(v):
+def chequeos(v, tiene_xml=True):
     filas = [("RUT del emisor válido (módulo 11)", v.get("rut_valido")), ("IVA = 19% del neto", v.get("iva_cuadra")),
-             ("Total = neto + IVA", v.get("total_cuadra")), ("Coincide con el XML del SII", v.get("coincide_xml"))]
-    html = "".join(f'<div class="check"><span>{t}</span><b class="{"si" if ok else "no"}">{"✔ Sí" if ok else "✘ No"}</b></div>'
-                   for t, ok in filas)
+             ("Total = neto + IVA", v.get("total_cuadra")),
+             ("Coincide con el XML del SII", v.get("coincide_xml") if tiene_xml else None)]
+
+    def marca(ok):
+        if ok is None:  # no se adjuntó XML: no es un error, solo no hay con qué comparar
+            return f'<b style="color:{GRIS}">— Sin XML adjunto</b>'
+        return f'<b class="{"si" if ok else "no"}">{"✔ Sí" if ok else "✘ No"}</b>'
+    html = "".join(f'<div class="check"><span>{t}</span>{marca(ok)}</div>' for t, ok in filas)
     html += (f'<div class="check"><span>Calidad de la imagen</span><b>{v.get("calidad_imagen", 0):.0%}</b></div>'
              f'<div class="check"><span>Confianza mínima del OCR</span><b>{v.get("confianza_ocr_min", 0):.0%}</b></div>')
     st.markdown(html, unsafe_allow_html=True)
 
 
-def mostrar_resultado(p, variables=None, campos=None, tiempos=None):
+def mostrar_resultado(p, variables=None, campos=None, tiempos=None, tiene_xml=True):
     revision = p["decision"] == "REVISION_HUMANA"
     titulo = "🔎 Enviar a revisión humana" if revision else "✅ Aprobado automáticamente"
     detalle = ("El modelo detectó riesgo de error en la extracción." if revision
@@ -171,7 +176,7 @@ def mostrar_resultado(p, variables=None, campos=None, tiempos=None):
         if variables:
             with a:
                 st.markdown("**Validaciones tributarias**")
-                chequeos(variables)
+                chequeos(variables, tiene_xml)
         if campos:
             with b:
                 st.markdown("**Campos leídos por el OCR**")
@@ -187,8 +192,18 @@ def mostrar_resultado(p, variables=None, campos=None, tiempos=None):
                 tooltip=["Etapa", alt.Tooltip("ms:Q", format=".1f")]).properties(height=120).configure_view(strokeWidth=0), use_container_width=True)
 
 
-PASOS = ["API REST recibe (HTTPS)", "Cola RabbitMQ", "Worker: Amazon Textract",
-         "Reglas SII (RUT, IVA, XML)", "Modelo en SageMaker", "Resultado y explicación"]
+NOMBRE_OCR = {"textract": "Amazon Textract", "local": "Tesseract (OCR local)", "tesseract": "Tesseract (OCR local)",
+              "simulado": "OCR simulado (pruebas)"}
+NOMBRE_MODELO = {"sagemaker": "Modelo en SageMaker", "local": "Modelo local"}
+
+
+def nombres_pasos(ocr="textract", modelo="sagemaker"):
+    """Los pasos muestran el motor que se usa de verdad: en AWS Textract + SageMaker, en local Tesseract + modelo local."""
+    return ["API REST recibe (HTTPS)", "Cola RabbitMQ", f"Worker: {NOMBRE_OCR.get(ocr, ocr)}",
+            "Reglas SII (RUT, IVA, XML)", NOMBRE_MODELO.get(modelo, f"Modelo {modelo}"), "Resultado y explicación"]
+
+
+PASOS = nombres_pasos()
 ICONO = {"listo": "✔", "error": "✘"}
 
 
@@ -237,9 +252,10 @@ def procesar(nombre, contenido, tipo_mime, tipo, xml=None):
         if doc and doc["estado"] == "listo":
             res = doc["resultado"]
             tiempos[3] = doc["ms_extraccion"] or 0
-            avanzar(2, activo=2, detalle="Amazon Textract leyendo la factura", tiempos=tiempos)
+            ocr = NOMBRE_OCR.get(res.get("motor_ocr") or "", "OCR")
+            avanzar(2, activo=2, detalle=f"{ocr} leyendo el documento", tiempos=tiempos)
             time.sleep(0.5)
-            st.write("🔍 OCR (Amazon Textract) leyó los campos de la factura")
+            st.write(f"🔍 OCR ({ocr}) leyó los campos del documento")
             avanzar(3, activo=3, detalle="Validando RUT, IVA, total y XML", tiempos=tiempos)
             time.sleep(0.5)
             st.write("📐 Reglas del SII aplicadas: RUT, IVA, total y XML")
@@ -262,10 +278,13 @@ def procesar(nombre, contenido, tipo_mime, tipo, xml=None):
 
 # ---------------- Barra lateral ----------------
 salud = leer_salud()
+if salud:
+    PASOS = nombres_pasos(salud.get("extractor", "textract"), salud.get("modelo", "sagemaker"))
 with st.sidebar:
     st.markdown("### ⚙️ Estado del sistema")
     if salud:
-        st.success(f"API en línea · modelo **{salud.get('modelo', '?')}**")
+        st.success(f"API en línea · OCR **{NOMBRE_OCR.get(salud.get('extractor'), salud.get('extractor', '?'))}** · "
+                   f"{NOMBRE_MODELO.get(salud.get('modelo'), salud.get('modelo', '?'))}")
     else:
         st.error("API sin respuesta")
     auto = st.toggle("Actualizar indicadores cada 5 s", value=True)
@@ -393,7 +412,8 @@ with t1:
                 st.image(imagen, caption=doc.get("nombre_archivo"), use_container_width=True)
         with col_res:
             mostrar_resultado(res["prediccion"], res["variables"], (res.get("extraccion") or {}).get("campos"),
-                              {"OCR": doc["ms_extraccion"], "Modelo": doc["ms_modelo"], "Total": doc["ms_total"]})
+                              {"OCR": doc["ms_extraccion"], "Modelo": doc["ms_modelo"], "Total": doc["ms_total"]},
+                              tiene_xml=res.get("tiene_xml", True))
     elif doc:
         st.error(f"Error al procesar: {doc.get('error')}")
 

@@ -20,7 +20,7 @@ COLA_TRABAJOS = "documentos.procesar"
 COLA_FALLIDOS = "documentos.fallidos"
 EXCHANGE_RESULTADOS = "docuvali.resultados"
 
-EXTRACTOR = _env("EXTRACTOR", "textract")      # textract | simulado
+EXTRACTOR = _env("EXTRACTOR", "textract")      # textract | local | simulado
 PREDICTOR = _env("PREDICTOR", "sagemaker")     # sagemaker | local
 AWS_REGION = _env("AWS_REGION", _env("AWS_DEFAULT_REGION", "us-east-1"))
 SAGEMAKER_ENDPOINT = _env("SAGEMAKER_ENDPOINT", "docuvali-endpoint")

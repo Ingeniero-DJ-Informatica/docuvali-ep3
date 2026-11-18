@@ -41,7 +41,7 @@ class Procesador:
         self.repo.actualizar(doc_id, estado="procesando")
         try:
             if mensaje.get("variables"):           # entrada ya estructurada (JSON)
-                variables, extraccion, ms_ext = mensaje["variables"], None, 0.0
+                variables, extraccion, ms_ext, xml = mensaje["variables"], None, 0.0, None
             else:                                    # entrada imagen -> OCR
                 with open(os.path.join(config.UPLOAD_DIR, doc_id), "rb") as f:
                     contenido = f.read()
@@ -59,7 +59,8 @@ class Procesador:
             prediccion = aplicar_reglas(prediccion, variables)
             ms_total = round((time.perf_counter() - t0) * 1000, 1)
             resultado = {"extraccion": extraccion, "variables": variables, "prediccion": prediccion,
-                         "motor_modelo": self.predictor.nombre}
+                         "motor_modelo": self.predictor.nombre,
+                         "motor_ocr": (extraccion or {}).get("motor"), "tiene_xml": xml is not None}
             self.repo.actualizar(doc_id, estado="listo", resultado=resultado,
                                  ms_extraccion=ms_ext, ms_modelo=ms_mod, ms_total=ms_total)
             log.info("documento=%s decision=%s prob=%.3f ms_ocr=%s ms_modelo=%s ms_total=%s", doc_id,

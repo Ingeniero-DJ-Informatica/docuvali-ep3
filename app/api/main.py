@@ -106,7 +106,7 @@ def crear_app(repo=None, broker=None, predictor=None, limite_por_min=None):
 
     @app.get("/health", tags=["Sistema"], summary="Estado del servicio (usado por el balanceador)")
     def health():
-        return {"estado": "ok", "servicio": "docuvali-api", "modelo": predictor.nombre}
+        return {"estado": "ok", "servicio": "docuvali-api", "modelo": predictor.nombre, "extractor": config.EXTRACTOR}
 
     @app.post("/api/v1/documentos", status_code=202, response_model=Aceptado, tags=["Documentos"],
               summary="Sube una factura o boleta (imagen/PDF) para procesarla")

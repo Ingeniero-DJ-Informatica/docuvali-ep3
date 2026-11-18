@@ -30,7 +30,7 @@ Dashboard Streamlit (KPIs, explicación de cada decisión, calidad del modelo)
 | Modelo | Regresión logística (scikit-learn) en Amazon SageMaker | `model/` |
 | Dashboard | Streamlit | `dashboard/` |
 | Despliegue | Docker Compose en EC2 + Nginx TLS | `docker-compose.yml`, `deploy/` |
-| Pruebas | pytest (22 casos) + Locust | `tests/`, `loadtest/` |
+| Pruebas | pytest (24 casos, testeo en 10 pasos) + Locust | `tests/`, `loadtest/` |
 
 ## Endpoints principales
 

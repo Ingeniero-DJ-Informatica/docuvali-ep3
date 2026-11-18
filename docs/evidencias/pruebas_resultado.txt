@@ -3,30 +3,42 @@ platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0 -- /usr/local/bin/p
 cachedir: .pytest_cache
 rootdir: /home/claude/docuvali-ep3
 plugins: platformdirs-4.13.5, anyio-4.15.1, locust-2.47.0
-collecting ... collected 22 items
+collecting ... collected 24 items
 
 tests/test_integracion.py::test_cp09_health PASSED                       [  4%]
-tests/test_integracion.py::test_cp10_rechaza_sin_clave PASSED            [  9%]
-tests/test_integracion.py::test_cp11_rate_limiting PASSED                [ 13%]
-tests/test_integracion.py::test_cp12_validacion_de_entrada PASSED        [ 18%]
-tests/test_integracion.py::test_cp13_prediccion_tiempo_real PASSED       [ 22%]
-tests/test_integracion.py::test_cp14_flujo_completo_factura_correcta PASSED [ 27%]
-tests/test_integracion.py::test_cp15_flujo_iva_incorrecto_va_a_revision PASSED [ 31%]
-tests/test_integracion.py::test_cp16_flujo_boleta_borrosa PASSED         [ 36%]
-tests/test_integracion.py::test_cp17_formato_no_soportado PASSED         [ 40%]
-tests/test_integracion.py::test_cp18_documento_inexistente PASSED        [ 45%]
-tests/test_integracion.py::test_cp19_metricas_dashboard PASSED           [ 50%]
-tests/test_integracion.py::test_cp20_falla_del_modelo_no_pierde_el_documento PASSED [ 54%]
-tests/test_rabbitmq.py::test_cp21_interoperabilidad_api_rabbitmq_worker PASSED [ 59%]
-tests/test_rabbitmq.py::test_cp22_mensaje_fallido_va_a_dlq PASSED        [ 63%]
-tests/test_unitarias.py::test_cp01_rut_modulo11 PASSED                   [ 68%]
-tests/test_unitarias.py::test_cp02_monto_formato_chileno PASSED          [ 72%]
-tests/test_unitarias.py::test_cp03_iva_y_total PASSED                    [ 77%]
-tests/test_unitarias.py::test_cp04_variables_desde_ocr PASSED            [ 81%]
-tests/test_unitarias.py::test_cp05_modelo_aprueba_documento_limpio PASSED [ 86%]
-tests/test_unitarias.py::test_cp06_modelo_explica_revision PASSED        [ 90%]
-tests/test_unitarias.py::test_cp07_contrato_endpoint_sagemaker PASSED    [ 95%]
-tests/test_unitarias.py::test_cp08_inferencia_json_igual_a_scikit_learn PASSED [100%]
+tests/test_integracion.py::test_cp10_rechaza_sin_clave PASSED            [  8%]
+tests/test_integracion.py::test_cp11_rate_limiting PASSED                [ 12%]
+tests/test_integracion.py::test_cp12_validacion_de_entrada PASSED        [ 16%]
+tests/test_integracion.py::test_cp13_prediccion_tiempo_real PASSED       [ 20%]
+tests/test_integracion.py::test_cp14_flujo_completo_factura_correcta PASSED [ 25%]
+tests/test_integracion.py::test_cp15_flujo_iva_incorrecto_va_a_revision PASSED [ 29%]
+tests/test_integracion.py::test_cp16_flujo_boleta_borrosa PASSED         [ 33%]
+tests/test_integracion.py::test_cp17_formato_no_soportado PASSED         [ 37%]
+tests/test_integracion.py::test_cp18_documento_inexistente PASSED        [ 41%]
+tests/test_integracion.py::test_cp19_metricas_dashboard PASSED           [ 45%]
+tests/test_integracion.py::test_cp20_falla_del_modelo_no_pierde_el_documento PASSED [ 50%]
+tests/test_rabbitmq.py::test_cp21_interoperabilidad_api_rabbitmq_worker PASSED [ 54%]
+tests/test_rabbitmq.py::test_cp22_mensaje_fallido_va_a_dlq PASSED        [ 58%]
+tests/test_unitarias.py::test_cp01_rut_modulo11 PASSED                   [ 62%]
+tests/test_unitarias.py::test_cp02_monto_formato_chileno PASSED          [ 66%]
+tests/test_unitarias.py::test_cp03_iva_y_total PASSED                    [ 70%]
+tests/test_unitarias.py::test_cp04_variables_desde_ocr PASSED            [ 75%]
+tests/test_unitarias.py::test_cp05_modelo_aprueba_documento_limpio PASSED [ 79%]
+tests/test_unitarias.py::test_cp06_modelo_explica_revision PASSED        [ 83%]
+tests/test_unitarias.py::test_cp07_contrato_endpoint_sagemaker PASSED    [ 87%]
+tests/test_unitarias.py::test_cp08_inferencia_json_igual_a_scikit_learn PASSED [ 91%]
+tests/test_unitarias.py::test_cp23_regla_obligatoria_rut_invalido PASSED [ 95%]
+tests/test_unitarias.py::test_cp24_ocr_local_lee_factura PASSED          [100%]
 
+=============================== warnings summary ===============================
+tests/test_rabbitmq.py:24
+  /home/claude/docuvali-ep3/tests/test_rabbitmq.py:24: DeprecationWarning: BlockingConnection is deprecated and will be removed in Pika 2.0. Use Connection instead, which runs its own IOLoop on a background thread and provides a thread-safe blocking API that does not stall heartbeats on slow message processing. See https://pika.github.io/pika/latest/modules/adapters/thread_safe/
+    pika.BlockingConnection(pika.URLParameters(config.RABBITMQ_URL)).close()
+
+tests/test_rabbitmq.py::test_cp21_interoperabilidad_api_rabbitmq_worker
+  /home/claude/docuvali-ep3/app/common/broker.py:35: DeprecationWarning: BlockingConnection is deprecated and will be removed in Pika 2.0. Use Connection instead, which runs its own IOLoop on a background thread and provides a thread-safe blocking API that does not stall heartbeats on slow message processing. See https://pika.github.io/pika/latest/modules/adapters/thread_safe/
+    con = pika.BlockingConnection(params)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 - generated xml file: /home/claude/docuvali-ep3/docs/evidencias/pruebas_junit.xml -
-============================== 22 passed in 3.48s ==============================
+======================== 24 passed, 2 warnings in 9.75s ========================

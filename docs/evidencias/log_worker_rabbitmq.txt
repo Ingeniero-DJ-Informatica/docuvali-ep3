@@ -1,16 +1,30 @@
-2026-11-17 13:54:40,259 INFO pika.adapters.utils.connection_workflow Pika version 1.5.0 connecting to ('127.0.0.1', 5672)
-2026-11-17 13:54:40,260 INFO pika.adapters.utils.io_services_utils Socket connected: <socket.socket fd=9, family=2, type=1, proto=6, laddr=('127.0.0.1', 32994), raddr=('127.0.0.1', 5672)>
-2026-11-17 13:54:40,260 INFO pika.adapters.utils.connection_workflow Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7f41f832dd30>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7f41f832dd30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>).
-2026-11-17 13:54:40,263 INFO pika.adapters.utils.connection_workflow AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7f41f832dd30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
-2026-11-17 13:54:40,263 INFO pika.adapters.utils.connection_workflow AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7f41f832dd30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
-2026-11-17 13:54:40,263 INFO pika.adapters.blocking_connection Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7f41f832dd30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
-2026-11-17 13:54:40,264 INFO pika.adapters.blocking_connection Created channel=1
-2026-11-17 13:54:40,267 INFO docuvali.worker worker listo: extractor=simulado modelo=local
-2026-11-17 13:54:42,145 INFO docuvali.pipeline documento=9e63a3cce1f3 decision=APROBADO_AUTOMATICO prob=0.095 ms_ocr=19.9 ms_modelo=0.1 ms_total=21.0
-2026-11-17 13:54:42,240 ERROR docuvali.pipeline documento=sinarchivo01 error=[Errno 2] No such file or directory: '/tmp/docuvali-test-r04u4yzd/uploads/sinarchivo01'
+2026-11-18 14:11:31,095 INFO pika.adapters.utils.connection_workflow Pika version 1.5.0 connecting to ('127.0.0.1', 5672)
+2026-11-18 14:11:31,096 INFO pika.adapters.utils.io_services_utils Socket connected: <socket.socket fd=9, family=2, type=1, proto=6, laddr=('127.0.0.1', 59014), raddr=('127.0.0.1', 5672)>
+2026-11-18 14:11:31,096 INFO pika.adapters.utils.connection_workflow Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7ff3aff31d30>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7ff3aff31d30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>).
+2026-11-18 14:11:31,100 INFO pika.adapters.utils.connection_workflow AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7ff3aff31d30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2026-11-18 14:11:31,100 INFO pika.adapters.utils.connection_workflow AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7ff3aff31d30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2026-11-18 14:11:31,100 INFO pika.adapters.blocking_connection Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7ff3aff31d30> params=<URLParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2026-11-18 14:11:31,100 INFO pika.adapters.blocking_connection Created channel=1
+2026-11-18 14:11:31,104 INFO docuvali.worker worker listo: extractor=simulado modelo=local
+2026-11-18 14:11:32,970 INFO docuvali.pipeline documento=70430544231d decision=APROBADO_AUTOMATICO prob=0.095 ms_ocr=26.3 ms_modelo=0.1 ms_total=27.3
+2026-11-18 14:11:33,059 ERROR docuvali.pipeline documento=sinarchivo01 error=[Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01'
 Traceback (most recent call last):
-  File "/home/claude/docuvali-ep3/app/common/pipeline.py", line 25, in __call__
+  File "/home/claude/docuvali-ep3/app/common/pipeline.py", line 46, in __call__
     with open(os.path.join(config.UPLOAD_DIR, doc_id), "rb") as f:
          ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/docuvali-test-r04u4yzd/uploads/sinarchivo01'
-2026-11-17 13:54:42,241 ERROR docuvali.worker documento=sinarchivo01 enviado a DLQ tras 3 intentos
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01'
+2026-11-18 14:11:33,061 WARNING docuvali.worker documento=sinarchivo01 fallo intento 1: [Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01' (reintento)
+2026-11-18 14:11:33,062 ERROR docuvali.pipeline documento=sinarchivo01 error=[Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01'
+Traceback (most recent call last):
+  File "/home/claude/docuvali-ep3/app/common/pipeline.py", line 46, in __call__
+    with open(os.path.join(config.UPLOAD_DIR, doc_id), "rb") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01'
+2026-11-18 14:11:33,063 WARNING docuvali.worker documento=sinarchivo01 fallo intento 2: [Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01' (reintento)
+2026-11-18 14:11:33,064 ERROR docuvali.pipeline documento=sinarchivo01 error=[Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01'
+Traceback (most recent call last):
+  File "/home/claude/docuvali-ep3/app/common/pipeline.py", line 46, in __call__
+    with open(os.path.join(config.UPLOAD_DIR, doc_id), "rb") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/docuvali-test-nsritc8p/uploads/sinarchivo01'
+2026-11-18 14:11:33,065 ERROR docuvali.worker documento=sinarchivo01 enviado a DLQ tras 3 intentos

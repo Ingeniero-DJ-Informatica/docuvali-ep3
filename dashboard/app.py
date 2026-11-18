@@ -23,11 +23,18 @@ ETIQUETAS = {"calidad_imagen": "Calidad de la imagen", "confianza_ocr_media": "C
              "coincide_xml": "Coincide con XML del SII", "log_monto": "Monto del documento",
              "tipo_documento=factura": "Es factura", "tipo_documento=boleta": "Es boleta",
              "tipo_documento=nota_credito": "Es nota de crédito"}
-MUESTRAS_DEMO = {
-    "Factura correcta": ("factura_correcta", "factura"),
-    "Factura con IVA incorrecto": ("factura_iva_incorrecto", "factura"),
-    "Boleta borrosa": ("boleta_borrosa", "boleta"),
-}
+
+
+def cargar_muestras():
+    """Lee el índice de documentos de muestra (data/muestras/muestras.json)."""
+    try:
+        import json
+        return json.loads((MUESTRAS / "muestras.json").read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+
+LISTA_MUESTRAS = cargar_muestras()
 
 st.set_page_config(page_title="DocuVali · Panel", page_icon="🧾", layout="wide", initial_sidebar_state="expanded")
 
@@ -326,18 +333,53 @@ with t1:
         enviar = st.button("Procesar documento", type="primary", disabled=archivo is None, use_container_width=True)
     with der:
         st.markdown("#### …o prueba con una muestra")
-        st.caption("Documentos ficticios incluidos en el proyecto")
-        elegido = None
-        for etiqueta in MUESTRAS_DEMO:
-            if st.button(f"▶  {etiqueta}", use_container_width=True, disabled=not MUESTRAS.exists()):
-                elegido = etiqueta
+        st.caption(f"{len(LISTA_MUESTRAS)} documentos ficticios incluidos en el proyecto")
+        elegido, lote = None, False
+        if LISTA_MUESTRAS:
+            opciones = {f"{m['archivo'].replace('_', ' ').capitalize()} — {m['descripcion']}": m for m in LISTA_MUESTRAS}
+            seleccion = st.selectbox("Documento de muestra", list(opciones), label_visibility="collapsed")
+            vista = MUESTRAS / f"{opciones[seleccion]['archivo']}.png"
+            if vista.exists():
+                st.image(str(vista), width=170)
+            c1, c2 = st.columns(2)
+            if c1.button("▶  Procesar muestra", type="primary", use_container_width=True):
+                elegido = opciones[seleccion]
+            lote = c2.button(f"⚡  Procesar las {len(LISTA_MUESTRAS)}", use_container_width=True,
+                             help="Envía todas las muestras a la cola: útil para mostrar la escalabilidad y llenar el historial")
+        else:
+            st.info("No se encontraron muestras (carpeta data/muestras).")
 
     doc, imagen = None, None
     if enviar and archivo:
         imagen = archivo.getvalue()
         doc = procesar(archivo.name, imagen, archivo.type, tipo, xml.getvalue() if xml else None)
+    elif lote:
+        barra = st.progress(0.0, text="Enviando documentos a la cola…")
+        ids = []
+        for m in LISTA_MUESTRAS:
+            files = {"archivo": (f"{m['archivo']}.png", (MUESTRAS / f"{m['archivo']}.png").read_bytes(), "image/png")}
+            if m.get("con_xml"):
+                files["xml_dte"] = (f"{m['archivo']}.xml", (MUESTRAS / f"{m['archivo']}.xml").read_bytes(), "application/xml")
+            ids.append((m, api("POST", "/api/v1/documentos", files=files, data={"tipo_documento": m["tipo"]})["id"]))
+        t0, filas = time.perf_counter(), {}
+        while len(filas) < len(ids) and time.perf_counter() - t0 < 60:
+            for m, doc_id in ids:
+                if doc_id not in filas:
+                    d = api("GET", f"/api/v1/documentos/{doc_id}")
+                    if d["estado"] in ("listo", "error"):
+                        pr = (d.get("resultado") or {}).get("prediccion") or {}
+                        filas[doc_id] = {"Documento": m["archivo"].replace("_", " "), "Caso": m["descripcion"],
+                                         "Decisión": NOMBRES.get(pr.get("decision"), "Error"),
+                                         "Riesgo": pr.get("probabilidad_error"), "ms": d["ms_total"]}
+            barra.progress(len(filas) / len(ids), text=f"Procesados {len(filas)} de {len(ids)} por los workers…")
+            time.sleep(0.3)
+        barra.progress(1.0, text=f"{len(filas)} documentos procesados en {time.perf_counter() - t0:.1f} s")
+        st.cache_data.clear()
+        st.dataframe(pd.DataFrame(filas.values()), hide_index=True, use_container_width=True, column_config={
+            "Riesgo": st.column_config.ProgressColumn("Riesgo de error", min_value=0, max_value=1, format="percent"),
+            "ms": st.column_config.NumberColumn("Tiempo (ms)", format="%.0f")})
     elif elegido:
-        nombre, tipo_m = MUESTRAS_DEMO[elegido]
+        nombre, tipo_m = elegido["archivo"], elegido["tipo"]
         imagen = (MUESTRAS / f"{nombre}.png").read_bytes()
         ruta_xml = MUESTRAS / f"{nombre}.xml"
         doc = procesar(f"{nombre}.png", imagen, "image/png", tipo_m, ruta_xml.read_bytes() if ruta_xml.exists() else None)

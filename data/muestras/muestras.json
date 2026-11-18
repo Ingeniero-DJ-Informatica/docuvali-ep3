@@ -1,0 +1,80 @@
+[
+  {
+    "archivo": "factura_correcta",
+    "tipo": "factura",
+    "descripcion": "Todo cuadra",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_iva_incorrecto",
+    "tipo": "factura",
+    "descripcion": "IVA mal calculado y RUT inválido",
+    "con_xml": true
+  },
+  {
+    "archivo": "boleta_borrosa",
+    "tipo": "boleta",
+    "descripcion": "Foto muy borrosa",
+    "con_xml": false
+  },
+  {
+    "archivo": "boleta_correcta",
+    "tipo": "boleta",
+    "descripcion": "Boleta nítida con XML",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_monto_alto",
+    "tipo": "factura",
+    "descripcion": "Monto alto, todo cuadra",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_rut_invalido",
+    "tipo": "factura",
+    "descripcion": "Solo el RUT es inválido",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_total_no_cuadra",
+    "tipo": "factura",
+    "descripcion": "Total distinto de neto + IVA",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_xml_distinto",
+    "tipo": "factura",
+    "descripcion": "El total no coincide con el XML del SII",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_sin_xml",
+    "tipo": "factura",
+    "descripcion": "Correcta, pero sin XML para comparar",
+    "con_xml": false
+  },
+  {
+    "archivo": "nota_credito_correcta",
+    "tipo": "nota_credito",
+    "descripcion": "Nota de crédito que cuadra",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_foto_celular",
+    "tipo": "factura",
+    "descripcion": "Foto de celular inclinada, con grano",
+    "con_xml": true
+  },
+  {
+    "archivo": "factura_levemente_borrosa",
+    "tipo": "factura",
+    "descripcion": "Algo desenfocada, datos correctos",
+    "con_xml": true
+  },
+  {
+    "archivo": "boleta_sin_xml_borrosa",
+    "tipo": "boleta",
+    "descripcion": "Boleta desenfocada y sin XML",
+    "con_xml": false
+  }
+]

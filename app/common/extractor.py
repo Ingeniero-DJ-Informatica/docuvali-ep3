@@ -2,13 +2,16 @@
 
 - TextractExtractor: usa Amazon Textract (AnalyzeExpense), servicio AIaaS
   de AWS especializado en facturas y boletas.
+- LocalOCRExtractor: OCR en el propio computador con Tesseract; lee cualquier
+  imagen sin AWS (menos preciso que Textract, ideal para ensayar en local).
 - SimuladoExtractor: lee los campos desde los metadatos PNG de las imágenes
   de muestra; sirve para pruebas automáticas sin credenciales de AWS.
 
-Ambos devuelven el mismo diccionario, así el resto del sistema no cambia.
+Todos devuelven el mismo diccionario, así el resto del sistema no cambia.
 """
 import io
 import json
+import re
 
 import numpy as np
 from PIL import Image, ImageFilter
@@ -76,6 +79,68 @@ class TextractExtractor:
         return _resultado(campos, confianzas, "\n".join(textos), calidad_imagen(contenido), "textract")
 
 
+class LocalOCRExtractor:
+    """OCR en el propio computador con Tesseract (sin AWS). Lee facturas y boletas chilenas
+    buscando RUT, folio, fecha, neto, IVA y total con expresiones regulares."""
+
+    MONTO = re.compile(r"\$\s*(\d{1,3}(?:\.\d{3})+|\d+)")
+    NUMERO = re.compile(r"(\d{1,3}(?:\.\d{3})+|\d{4,})(?!\s*%)")
+    FOLIO = re.compile(r"(?:N\s*[°º*o]|FOLIO|Nro\.?)\s*:?\s*(\d{1,10})", re.I)
+    FECHA = re.compile(r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})")
+
+    def __init__(self, idioma="spa"):
+        import pytesseract
+        self.ocr, self.idioma = pytesseract, idioma
+
+    def _lineas(self, img):
+        d = self.ocr.image_to_data(img, lang=self.idioma, output_type=self.ocr.Output.DICT)
+        lineas = {}
+        for i, palabra in enumerate(d["text"]):
+            if palabra.strip() and float(d["conf"][i]) >= 0:
+                clave = (d["block_num"][i], d["par_num"][i], d["line_num"][i])
+                lineas.setdefault(clave, []).append((palabra, float(d["conf"][i])))
+        return [(" ".join(p for p, _ in v), sum(c for _, c in v) / len(v) / 100) for v in lineas.values()]
+
+    def _monto(self, texto):
+        m = self.MONTO.findall(texto) or self.NUMERO.findall(texto)
+        return limpiar_monto(m[-1]) if m else None
+
+    def extraer(self, contenido: bytes) -> dict:
+        calidad = calidad_imagen(contenido)
+        try:
+            img = Image.open(io.BytesIO(contenido)).convert("L")
+        except Exception:  # PDF u otro formato: en local solo se leen imágenes
+            return _resultado({}, {}, "", calidad, "tesseract")
+        if max(img.size) < 1400:  # agrandar fotos pequeñas mejora el OCR
+            f = 1400 / max(img.size)
+            img = img.resize((int(img.width * f), int(img.height * f)))
+        lineas = self._lineas(img)
+        texto = "\n".join(t for t, _ in lineas)
+        campos, confianzas = {}, {}
+
+        def guardar(nombre, valor, conf):
+            if valor not in (None, "") and nombre not in campos:
+                campos[nombre], confianzas[nombre] = valor, round(conf, 3)
+
+        for t, conf in lineas:
+            mayus = t.upper()
+            if "NETO" in mayus:
+                guardar("neto", self._monto(t), conf)
+            elif "IVA" in mayus and "TOTAL" not in mayus:
+                guardar("iva", self._monto(t), conf)
+            elif "TOTAL" in mayus and "SUB" not in mayus:
+                guardar("total", self._monto(t), conf)
+            if (m := self.FOLIO.search(t)):
+                guardar("folio", m.group(1), conf)
+            if (m := self.FECHA.search(t)):
+                guardar("fecha", f"{m.group(3)}-{int(m.group(2)):02d}-{int(m.group(1)):02d}", conf)
+            if (r := buscar_rut(t)):
+                guardar("rut_emisor", r, conf)
+        if lineas:
+            guardar("emisor", lineas[0][0], lineas[0][1])
+        return _resultado(campos, confianzas, texto, calidad, "tesseract")
+
+
 class SimuladoExtractor:
     def extraer(self, contenido: bytes) -> dict:
         calidad = calidad_imagen(contenido)
@@ -93,4 +158,9 @@ class SimuladoExtractor:
 
 
 def crear_extractor():
-    return TextractExtractor() if config.EXTRACTOR == "textract" else SimuladoExtractor()
+    """textract = Amazon Textract (AWS) · local = Tesseract en el computador · simulado = pruebas automáticas."""
+    if config.EXTRACTOR == "textract":
+        return TextractExtractor()
+    if config.EXTRACTOR == "local":
+        return LocalOCRExtractor()
+    return SimuladoExtractor()

@@ -2,6 +2,9 @@
 FROM python:3.12-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /srv
+# Tesseract: OCR local para leer imágenes sin AWS (EXTRACTOR=local)
+RUN apt-get update && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-spa \
+    && rm -rf /var/lib/apt/lists/*
 COPY requirements-api.txt .
 RUN pip install --no-cache-dir -r requirements-api.txt
 

@@ -26,7 +26,7 @@ Dashboard Streamlit (KPIs, explicación de cada decisión, calidad del modelo)
 |---|---|---|
 | API REST + Swagger | FastAPI (`/docs`) | `app/api` |
 | Procesamiento asíncrono | RabbitMQ + worker Python | `app/worker`, `app/common/broker.py` |
-| OCR (servicio AIaaS) | Amazon Textract `AnalyzeExpense` | `app/common/extractor.py` |
+| OCR (servicio AIaaS) | Amazon Textract `AnalyzeExpense` (en local: Tesseract) | `app/common/extractor.py` |
 | Modelo | Regresión logística (scikit-learn) en Amazon SageMaker | `model/` |
 | Dashboard | Streamlit | `dashboard/` |
 | Despliegue | Docker Compose en EC2 + Nginx TLS | `docker-compose.yml`, `deploy/` |
@@ -49,7 +49,7 @@ Todas las rutas `/api/v1` requieren el encabezado `X-API-Key` y tienen límite d
 ## Ejecutar en local (sin AWS)
 
 ```bash
-cp .env.example .env            # en .env: EXTRACTOR=simulado y PREDICTOR=local
+cp .env.example .env            # en .env: EXTRACTOR=local (OCR con Tesseract) y PREDICTOR=local
 bash deploy/generar_certificado.sh 127.0.0.1
 docker compose up -d --build
 # Dashboard: https://localhost/dashboard/   Swagger: https://localhost/docs
@@ -71,8 +71,8 @@ docker compose up -d --build
 pip install -r requirements-dev.txt
 python data/generate_dataset.py          # dataset sintético de 8.000 documentos etiquetados
 python model/train.py                    # entrena, valida y exporta model.json + metrics.json
-python data/generar_muestras.py          # facturas de muestra (ficticias) para la demo
-pytest -v                                # 22 pruebas (las de RabbitMQ requieren un RabbitMQ activo)
+python data/generar_muestras.py          # 13 facturas y boletas de muestra (ficticias) para la demo
+pytest -v                                # 24 pruebas (las de RabbitMQ requieren un RabbitMQ activo)
 locust -f loadtest/locustfile.py --host http://localhost:8000 --headless -u 50 -r 10 -t 60s
 ```
 

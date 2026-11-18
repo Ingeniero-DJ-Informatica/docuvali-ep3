@@ -10,6 +10,27 @@ from .predictor import medir
 log = logging.getLogger("docuvali.pipeline")
 
 
+REGLAS_OBLIGATORIAS = {
+    "rut_valido": "Regla obligatoria: el RUT del emisor no es válido",
+    "total_cuadra": "Regla obligatoria: el total no cuadra con neto + IVA",
+}
+
+
+def aplicar_reglas(prediccion: dict, variables: dict) -> dict:
+    """Barrera de seguridad sobre el modelo: ciertos errores tributarios siempre van a revisión,
+    aunque el modelo los considere de bajo riesgo."""
+    fallas = [texto for campo, texto in REGLAS_OBLIGATORIAS.items() if variables.get(campo) == 0]
+    if not fallas or prediccion["decision"] == "REVISION_HUMANA":
+        return prediccion
+    p = dict(prediccion)
+    p["decision"] = "REVISION_HUMANA"
+    p["confianza_decision"] = 1.0
+    p["regla_aplicada"] = fallas
+    p["razones"] = [{"variable": "regla", "descripcion": f, "valor": 0, "aporte": 9.99,
+                     "efecto": "fuerza la revisión"} for f in fallas] + p.get("razones", [])[:2]
+    return p
+
+
 class Procesador:
     def __init__(self, repo, extractor, predictor):
         self.repo, self.extractor, self.predictor = repo, extractor, predictor
@@ -35,6 +56,7 @@ class Procesador:
                 variables = construir(extraccion, mensaje["tipo_documento"], xml)
 
             prediccion, ms_mod = medir(self.predictor, variables)
+            prediccion = aplicar_reglas(prediccion, variables)
             ms_total = round((time.perf_counter() - t0) * 1000, 1)
             resultado = {"extraccion": extraccion, "variables": variables, "prediccion": prediccion,
                          "motor_modelo": self.predictor.nombre}

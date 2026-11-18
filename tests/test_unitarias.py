@@ -78,3 +78,24 @@ def test_cp08_inferencia_json_igual_a_scikit_learn():
     a = pipe.predict_proba(df)[:, 1]
     b = np.array([inference.predecir(m, r)["probabilidad_error"] for r in df.to_dict("records")])
     assert np.max(np.abs(a - b)) < 1e-3
+
+
+def test_cp23_regla_obligatoria_rut_invalido(doc_limpio):
+    """CP-23: un RUT inválido siempre va a revisión, aunque el modelo lo apruebe."""
+    from app.common.pipeline import aplicar_reglas
+    m = inference.cargar_modelo(f"{RAIZ}/model/artifacts/model.json")
+    v = {**doc_limpio, "rut_valido": 0}
+    p = aplicar_reglas(inference.predecir(m, v), v)
+    assert p["decision"] == "REVISION_HUMANA" and p["regla_aplicada"]
+
+
+def test_cp24_ocr_local_lee_factura():
+    """CP-24: el OCR local (Tesseract) lee RUT, neto, IVA y total de una factura de muestra."""
+    import shutil
+    import pytest
+    if not shutil.which("tesseract"):
+        pytest.skip("Tesseract no instalado")
+    from app.common.extractor import LocalOCRExtractor
+    r = LocalOCRExtractor().extraer(open(f"{RAIZ}/data/muestras/factura_correcta.png", "rb").read())
+    c = r["campos"]
+    assert rut_valido(c["rut_emisor"]) and c["neto"] == 100000 and c["iva"] == 19000 and c["total"] == 119000

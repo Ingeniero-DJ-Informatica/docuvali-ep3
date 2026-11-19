@@ -90,7 +90,23 @@ class TextractExtractor:
         import boto3
         self.cliente = boto3.client("textract", region_name=region)
 
+    @staticmethod
+    def _pdf_a_png(contenido: bytes) -> bytes:
+        """Textract sincrónico solo acepta PDF de una página y en ciertos formatos internos.
+        Para aceptar cualquier PDF se envía su primera página convertida a PNG."""
+        import pypdfium2 as pdfium
+        pdf = pdfium.PdfDocument(contenido)
+        pagina = pdf[0]
+        imagen = pagina.render(scale=2).to_pil().convert("RGB")
+        pagina.close()
+        pdf.close()
+        salida = io.BytesIO()
+        imagen.save(salida, format="PNG")
+        return salida.getvalue()
+
     def extraer(self, contenido: bytes) -> dict:
+        if contenido.startswith(b"%PDF"):
+            contenido = self._pdf_a_png(contenido)
         r = self.cliente.analyze_expense(Document={"Bytes": contenido})
         campos, confianzas, textos = {}, {}, []
         for doc in r.get("ExpenseDocuments", []):

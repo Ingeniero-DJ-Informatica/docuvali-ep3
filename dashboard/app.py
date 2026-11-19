@@ -156,6 +156,27 @@ def chequeos(v, tiene_xml=True):
     st.markdown(html, unsafe_allow_html=True)
 
 
+def mostrar_documento(contenido: bytes, nombre: str | None):
+    """Vista previa. Un PDF no es una imagen: se dibuja su primera página."""
+    if contenido[:5] == b"%PDF-":
+        try:
+            import pypdfium2 as pdfium
+            pdf = pdfium.PdfDocument(contenido)
+            pagina = pdf[0]
+            vista = pagina.render(scale=2).to_pil()
+            pagina.close()
+            pdf.close()
+            st.image(vista, caption=nombre, use_container_width=True)
+            return
+        except Exception:
+            st.info("No se pudo mostrar la vista previa de este PDF. El análisis está a la derecha.")
+            return
+    try:
+        st.image(contenido, caption=nombre, use_container_width=True)
+    except Exception:
+        st.info("No se pudo mostrar la vista previa de este archivo.")
+
+
 def mostrar_resultado(p, variables=None, campos=None, tiempos=None, tiene_xml=True):
     revision = p["decision"] == "REVISION_HUMANA"
     titulo = "🔎 Enviar a revisión humana" if revision else "✅ Aprobado automáticamente"
@@ -409,7 +430,7 @@ with t1:
         col_img, col_res = st.columns([1, 2.6], gap="large")
         with col_img:
             if imagen:
-                st.image(imagen, caption=doc.get("nombre_archivo"), use_container_width=True)
+                mostrar_documento(imagen, doc.get("nombre_archivo"))
         with col_res:
             mostrar_resultado(res["prediccion"], res["variables"], (res.get("extraccion") or {}).get("campos"),
                               {"OCR": doc["ms_extraccion"], "Modelo": doc["ms_modelo"], "Total": doc["ms_total"]},

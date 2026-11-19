@@ -7,3 +7,4 @@ boto3==1.44.4
 numpy==2.5.3
 pillow==12.3.0
 pytesseract==0.3.13
+pypdfium2==5.11.0

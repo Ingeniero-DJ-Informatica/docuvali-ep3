@@ -40,6 +40,12 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    # La imagen comparte el healthcheck de la API (puerto 8000). El worker no escucha ahí.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os; os.kill(1, 0)"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
     deploy:
       replicas: 2                 # escalado horizontal: más workers = más documentos por minuto
     restart: unless-stopped
